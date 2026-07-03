@@ -774,106 +774,130 @@ export default function App() {
               <KPICard title="Monthly Attrition" value="1.2%" subtext="Retention Health" trend={-0.5} icon={UserMinus} colorClass="bg-rose-500" />
             </div>
 
-            <SectionHeader title="Payroll & Timekeeping Analytics" icon={DollarSign} />
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-              {/* UPDATED CHART 1: Payroll Monthly Breakdown */}
-              <ChartCard title="Payroll Monthly Breakdown" subtitle="Click legend to hide/show categories">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={workforceTrends}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                    <XAxis dataKey="month" axisLine={false} tickLine={false} />
-                    <YAxis axisLine={false} tickLine={false} tickFormatter={(val) => `₱${val / 1000}k`} />
-                    <Tooltip formatter={(value) => `₱${value.toLocaleString()}`} />
+            <SectionHeader title="Payroll Analytics" icon={DollarSign} />
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+  {/* 1. Payroll Cost Trend */}
+  <ChartCard title="PAYROLL COST – MONTHLY TREND">
+    <ResponsiveContainer width="100%" height={250}>
+      <LineChart data={workforceTrends}>
+        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+        <XAxis dataKey="month" axisLine={false} tickLine={false} />
+        <YAxis axisLine={false} tickLine={false} tickFormatter={(val) => `₱${val/1000}k`} />
+        <Tooltip formatter={(val) => `₱${val.toLocaleString()}`} />
+        <Line type="monotone" dataKey="payroll" stroke="#054d32" strokeWidth={3} dot={{r:4}} />
+      </LineChart>
+    </ResponsiveContainer>
+  </ChartCard>
 
-                    {/* Updated Legend with toggle and strike-through */}
-                    <Legend
-                      onClick={togglePayrollSeries}
-                      formatter={renderLegendText(payrollHidden)}
-                      iconType="circle"
-                    />
-                    <Bar dataKey="salary" name="Basic Salary" hide={payrollHidden['salary']} fill="#1e293b" stackId="a" />
-                    <Bar dataKey="allowances" name="Allowances" hide={payrollHidden['allowances']} fill="#3b82f6" stackId="a" />
-                    <Bar dataKey="ot" name="Overtime Pay" hide={payrollHidden['ot']} fill="#f59e0b" stackId="a" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </ChartCard>
+  {/* 2. Payroll Monthly Breakdown */}
+  <ChartCard title="PAYROLL MONTHLY BREAKDOWN" subtitle="Click legend to hide/show categories">
+    <ResponsiveContainer width="100%" height={250}>
+      <BarChart data={workforceTrends}>
+        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+        <XAxis dataKey="month" axisLine={false} tickLine={false} />
+        <Legend onClick={togglePayrollSeries} formatter={renderLegendText(payrollHidden)} iconType="circle" />
+        <Bar dataKey="salary" name="Basic Salary" hide={payrollHidden['salary']} stackId="a" fill="#1e293b" />
+        <Bar dataKey="allowances" name="Allowances" hide={payrollHidden['allowances']} stackId="a" fill="#3b82f6" />
+        <Bar dataKey="ot" name="Overtime Pay" hide={payrollHidden['ot']} stackId="a" fill="#f59e0b" />
+      </BarChart>
+    </ResponsiveContainer>
+  </ChartCard>
 
-              {/* UPDATED CHART 2: OT Utilization & Cost Ratio */}
-              <ChartCard title="OT Utilization & Cost Ratio" subtitle="Toggle bars and lines separately">
-                <ResponsiveContainer width="100%" height="100%">
-                  <ComposedChart data={workforceTrends}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                    <XAxis dataKey="month" axisLine={false} tickLine={false} />
-                    <YAxis yAxisId="left" axisLine={false} tickLine={false} hide />
-                    <YAxis yAxisId="right" orientation="right" axisLine={false} tickLine={false} unit="%" />
-                    <Tooltip />
-                    <Legend
-                      onClick={toggleOtSeries}
-                      formatter={renderLegendText(otHidden)}
-                      iconType="circle"
-                    />
-                    <Bar yAxisId="left" dataKey="ot" name="OT Spend (₱)" hide={otHidden['ot']} fill="#f59e0b" fillOpacity={0.3} />
-                    <Line yAxisId="right" dataKey="otRatio" name="OT Cost Ratio %" hide={otHidden['otRatio']} stroke="#4f46e5" />
-                  </ComposedChart>
-                </ResponsiveContainer>
-              </ChartCard>
-            </div>
+  {/* 3. Salary Distribution by Dept */}
+  <ChartCard title="SALARY DISTRIBUTION BY DEPT">
+    <ResponsiveContainer width="100%" height={250}>
+      <PieChart>
+        <Pie data={deptComposition} dataKey="hc" nameKey="name" innerRadius={60} outerRadius={80} fill="#1e293b" paddingAngle={5} label>
+            {deptComposition.map((entry, index) => <Cell key={index} fill={['#1e293b', '#3b82f6', '#f59e0b'][index % 3]} />)}
+        </Pie>
+        <Tooltip /><Legend iconType="circle" />
+      </PieChart>
+    </ResponsiveContainer>
+  </ChartCard>
 
-            {/* Row 2: OT Type Breakdown & Attendance Trends */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-              {/* 4. OT Breakdown by Type (Regular, RD, Holiday) */}
-              <ChartCard title="OT Breakdown by Type" subtitle="Policy & Planning distribution">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    data={[
-                      { type: 'Regular OT', hours: 145 },
-                      { type: 'Rest Day', hours: 42 },
-                      { type: 'Holiday OT', hours: 28 },
-                      { type: 'Special Holiday', hours: 15 },
-                      { type: 'Night Diff OT', hours: 34 },
-                    ]}
-                    layout="vertical"
-                  >
-                    <XAxis type="number" hide />
-                    <YAxis dataKey="type" type="category" axisLine={false} tickLine={false} width={110} style={{ fontSize: '11px', fontWeight: '600' }} />
-                    <Tooltip cursor={{ fill: 'transparent' }} />
-                    <Bar dataKey="hours" fill="#8b5cf6" radius={[0, 4, 4, 0]} barSize={20} name="Total Hours" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </ChartCard>
-              {/* 7. Attendance Trends Over Time */}
-              <ChartCard title="Attendance Trends" subtitle="Workforce Punctuality & Behavior">
-                {/* Add a div with h-full to ensure the ResponsiveContainer has a target height */}
-                <div className="h-full w-full">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={workforceTrends}>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                      <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 12 }} />
+  {/* 4. Statutory Contributions */}
+  <ChartCard title="STATUTORY CONTRIBUTIONS BREAKDOWN">
+    <ResponsiveContainer width="100%" height={250}>
+      <PieChart>
+        <Pie data={[{name:'SSS',v:5000},{name:'PHIC',v:2000},{name:'HDMF',v:1500},{name:'Tax',v:3500}]} dataKey="v" innerRadius={60} outerRadius={80} fill="#10b981" paddingAngle={5} label />
+        <Tooltip /><Legend iconType="circle" />
+      </PieChart>
+    </ResponsiveContainer>
+  </ChartCard>
+</div>
 
-                      {/* Changed domain to 'auto' to ensure the line is always visible regardless of value */}
-                      <YAxis
-                        domain={['auto', 100]}
-                        axisLine={false}
-                        tickLine={false}
-                        unit="%"
-                        tick={{ fontSize: 12 }}
-                      />
+{/* --- 2. TIMEKEEPING ANALYTICS GROUP --- */}
+<SectionHeader title="Timekeeping Analytics" icon={Clock} />
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+  {/* 1. Attendance Trends */}
+  <ChartCard title="ATTENDANCE TRENDS">
+    <ResponsiveContainer width="100%" height={250}>
+      <LineChart data={workforceTrends}>
+        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+        <XAxis dataKey="month" axisLine={false} tickLine={false} />
+        <YAxis domain={[90, 100]} axisLine={false} tickLine={false} unit="%" />
+        <Tooltip /><Line type="monotone" dataKey="att" stroke="#0ea5e9" strokeWidth={3} dot={{r:4}} />
+      </LineChart>
+    </ResponsiveContainer>
+  </ChartCard>
 
-                      <Tooltip />
-                      <Line
-                        type="monotone"
-                        dataKey="att"  /* Note: Your mock data uses "att", not "attendance" */
-                        name="Attendance Rate"
-                        stroke="#0ea5e9"
-                        strokeWidth={3}
-                        dot={{ fill: '#0ea5e9', r: 4 }}
-                        activeDot={{ r: 6 }}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </ChartCard>
-            </div>
+  {/* 2. OT Trends Over Time */}
+  <ChartCard title="OT TRENDS OVER TIME">
+    <ResponsiveContainer width="100%" height={250}>
+      <LineChart data={workforceTrends}>
+        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+        <XAxis dataKey="month" axisLine={false} tickLine={false} />
+        <Tooltip /><Line type="monotone" dataKey="ot" stroke="#f59e0b" strokeWidth={3} />
+      </LineChart>
+    </ResponsiveContainer>
+  </ChartCard>
+
+  {/* 3. OT Breakdown by Type */}
+  <ChartCard title="OT BREAKDOWN BY TYPE">
+    <ResponsiveContainer width="100%" height={250}>
+      <BarChart data={[{type:'Reg',h:145},{type:'RD',h:42},{type:'Hol',h:28},{type:'Spl',h:15},{type:'Night',h:34}]} layout="vertical">
+        <XAxis type="number" hide /><YAxis dataKey="type" type="category" axisLine={false} tickLine={false} />
+        <Tooltip /><Bar dataKey="h" fill="#8b5cf6" radius={[0, 4, 4, 0]} barSize={20} />
+      </BarChart>
+    </ResponsiveContainer>
+  </ChartCard>
+
+  {/* 4 & 5. OT Utilization & Cost Ratio */}
+  <ChartCard title="OT UTILIZATION & COST RATIO">
+    <ResponsiveContainer width="100%" height={250}>
+      <ComposedChart data={workforceTrends}>
+        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+        <XAxis dataKey="month" axisLine={false} tickLine={false} />
+        <YAxis yAxisId="right" orientation="right" axisLine={false} tickLine={false} unit="%" />
+        <Tooltip />
+        <Legend onClick={toggleOtSeries} formatter={renderLegendText(otHidden)} iconType="circle" />
+        <Bar yAxisId="left" dataKey="ot" hide={otHidden['ot']} fill="#f59e0b" fillOpacity={0.3} />
+        <Line yAxisId="right" dataKey="otRatio" hide={otHidden['otRatio']} stroke="#4f46e5" strokeWidth={3} />
+      </ComposedChart>
+    </ResponsiveContainer>
+  </ChartCard>
+
+  {/* 6. Leave Utilization by Type */}
+  <ChartCard title="LEAVE UTILIZATION BY TYPE">
+    <ResponsiveContainer width="100%" height={250}>
+      <BarChart data={[{type:'Sick',u:45},{type:'Vacation',u:60},{type:'Emergency',u:15},{type:'Maternity',u:25}]}>
+        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+        <XAxis dataKey="type" axisLine={false} tickLine={false} />
+        <Tooltip /><Bar dataKey="u" fill="#64748b" radius={[4, 4, 0, 0]} />
+      </BarChart>
+    </ResponsiveContainer>
+  </ChartCard>
+
+  {/* 7. Leave Monthly Distribution */}
+  <ChartCard title="LEAVE MONTHLY DISTRIBUTION">
+    <ResponsiveContainer width="100%" height={250}>
+      <PieChart>
+        <Pie data={[{name:'Sick',v:25},{name:'Vacation',v:40},{name:'Emergency',v:15},{name:'Others',v:20}]} dataKey="v" innerRadius={60} outerRadius={80} fill="#64748b" label />
+        <Tooltip /><Legend iconType="circle" />
+      </PieChart>
+    </ResponsiveContainer>
+  </ChartCard>
+</div>
 
             {/* --- 3. WORKFORCE & EXCEPTIONS --- */}
             <SectionHeader title="Workforce Trends & Exceptions" icon={AlertCircle} />
