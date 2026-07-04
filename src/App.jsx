@@ -807,11 +807,16 @@ export default function App() {
   <ChartCard title="SALARY DISTRIBUTION BY DEPT">
     <ResponsiveContainer width="100%" height={250}>
       <PieChart>
-        <Pie data={deptComposition} dataKey="hc" nameKey="name" innerRadius={60} outerRadius={80} fill="#1e293b" paddingAngle={5} label>
-            {deptComposition.map((entry, index) => <Cell key={index} fill={['#1e293b', '#3b82f6', '#f59e0b'][index % 3]} />)}
-        </Pie>
-        <Tooltip /><Legend iconType="circle" />
-      </PieChart>
+      <Pie 
+        data={deptComposition} dataKey="hc" nameKey="name" 
+        innerRadius={65} outerRadius={85} paddingAngle={2}
+        label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
+      >
+        {deptComposition.map((_, i) => <Cell key={i} fill={['#1e293b', '#3b82f6', '#f59e0b'][i % 3]} stroke="none" />)}
+      </Pie>
+      <Tooltip />
+      <Legend iconType="rect" />
+    </PieChart>
     </ResponsiveContainer>
   </ChartCard>
 
@@ -819,9 +824,18 @@ export default function App() {
   <ChartCard title="STATUTORY CONTRIBUTIONS BREAKDOWN">
     <ResponsiveContainer width="100%" height={250}>
       <PieChart>
-        <Pie data={[{name:'SSS',v:5000},{name:'PHIC',v:2000},{name:'HDMF',v:1500},{name:'Tax',v:3500}]} dataKey="v" innerRadius={60} outerRadius={80} fill="#10b981" paddingAngle={5} label />
-        <Tooltip /><Legend iconType="circle" />
-      </PieChart>
+      <Pie 
+        data={[{name:'SSS',v:5000},{name:'PHIC',v:2000},{name:'HDMF',v:1500},{name:'Tax',v:3500}]} 
+        dataKey="v" innerRadius={65} outerRadius={85} paddingAngle={2}
+        label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
+      >
+        {[{name:'SSS'},{name:'PHIC'},{name:'HDMF'},{name:'Tax'}].map((_, i) => (
+          <Cell key={i} fill={['#10b981', '#3b82f6', '#f59e0b', '#6366f1'][i]} stroke="none" />
+        ))}
+      </Pie>
+      <Tooltip />
+      <Legend iconType="rect" />
+    </PieChart>
     </ResponsiveContainer>
   </ChartCard>
 </div>
@@ -871,8 +885,8 @@ export default function App() {
         <YAxis yAxisId="right" orientation="right" axisLine={false} tickLine={false} unit="%" />
         <Tooltip />
         <Legend onClick={toggleOtSeries} formatter={renderLegendText(otHidden)} iconType="circle" />
-        <Bar yAxisId="left" dataKey="ot" hide={otHidden['ot']} fill="#f59e0b" fillOpacity={0.3} />
-        <Line yAxisId="right" dataKey="otRatio" hide={otHidden['otRatio']} stroke="#4f46e5" strokeWidth={3} />
+        <Bar yAxisId="left" dataKey="ot" name="OT Spend (₱)" hide={otHidden['ot']} fill="#f59e0b" fillOpacity={0.3} />
+                    <Line yAxisId="right" dataKey="otRatio" name="OT Cost Ratio %" hide={otHidden['otRatio']} stroke="#4f46e5" />
       </ComposedChart>
     </ResponsiveContainer>
   </ChartCard>
@@ -880,11 +894,12 @@ export default function App() {
   {/* 6. Leave Utilization by Type */}
   <ChartCard title="LEAVE UTILIZATION BY TYPE">
     <ResponsiveContainer width="100%" height={250}>
-      <BarChart data={[{type:'Sick',u:45},{type:'Vacation',u:60},{type:'Emergency',u:15},{type:'Maternity',u:25}]}>
-        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-        <XAxis dataKey="type" axisLine={false} tickLine={false} />
-        <Tooltip /><Bar dataKey="u" fill="#64748b" radius={[4, 4, 0, 0]} />
-      </BarChart>
+      <BarChart data={[{type:'Sick',u:45},{type:'Vacation',u:60},{type:'Emergency',u:15},{type:'Maternity',u:25}]} layout="vertical">
+      <XAxis type="number" hide />
+      <YAxis dataKey="type" type="category" axisLine={false} tickLine={false} />
+      <Tooltip cursor={{fill: '#f8fafc'}} />
+      <Bar dataKey="u" barSize={20} radius={[0, 4, 4, 0]} fill="#64748b" />
+    </BarChart>
     </ResponsiveContainer>
   </ChartCard>
 
@@ -892,9 +907,18 @@ export default function App() {
   <ChartCard title="LEAVE MONTHLY DISTRIBUTION">
     <ResponsiveContainer width="100%" height={250}>
       <PieChart>
-        <Pie data={[{name:'Sick',v:25},{name:'Vacation',v:40},{name:'Emergency',v:15},{name:'Others',v:20}]} dataKey="v" innerRadius={60} outerRadius={80} fill="#64748b" label />
-        <Tooltip /><Legend iconType="circle" />
-      </PieChart>
+      <Pie 
+        data={[{name:'Sick',v:25},{name:'Vacation',v:40},{name:'Emergency',v:15},{name:'Others',v:20}]} 
+        dataKey="v" innerRadius={65} outerRadius={85} paddingAngle={2}
+        label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
+      >
+        {[{name:'Sick'},{name:'Vacation'},{name:'Emergency'},{name:'Others'}].map((_, i) => (
+          <Cell key={i} fill={['#64748b', '#3b82f6', '#f59e0b', '#10b981'][i]} stroke="none" />
+        ))}
+      </Pie>
+      <Tooltip />
+      <Legend iconType="rect" />
+    </PieChart>
     </ResponsiveContainer>
   </ChartCard>
 </div>
