@@ -24,12 +24,12 @@ const THEME = {
 };
 // --- Enhanced Mock Data ---
 const workforceTrends = [
-  { month: 'Oct', headcount: 185, attrition: 2.1, hiring: 3.2, payroll: 450000, salary: 380000, allowances: 28000, ot: 100, att: 94, otRatio: 9.3 },
-  { month: 'Nov', headcount: 188, attrition: 1.8, hiring: 4.1, payroll: 465000, salary: 390000, allowances: 30000, ot: 800, att: 95, otRatio: 9.6 },
-  { month: 'Dec', headcount: 191, attrition: 2.5, hiring: 4.8, payroll: 520000, salary: 410000, allowances: 42000, ot: 2500, att: 92, otRatio: 13.1 },
-  { month: 'Jan', headcount: 194, attrition: 1.2, hiring: 3.5, payroll: 470000, salary: 405000, allowances: 27000, ot: 380, att: 97, otRatio: 8.1 },
-  { month: 'Feb', headcount: 198, attrition: 1.0, hiring: 3.9, payroll: 485000, salary: 415000, allowances: 29000, ot: 1000, att: 98, otRatio: 8.4 },
-  { month: 'Mar', headcount: 201, attrition: 1.5, hiring: 4.2, payroll: 498000, salary: 425000, allowances: 29000, ot: 250, att: 96, otRatio: 8.8 },
+  { month: 'Oct', headcount: 185, attrition: 2.1, hiring: 3.2, payroll: 450000, salary: 380000, allowances: 28000, ot: 42000, att: 94, otRatio: 9.3 },
+  { month: 'Nov', headcount: 188, attrition: 1.8, hiring: 4.1, payroll: 465000, salary: 390000, allowances: 30000, ot: 45000, att: 95, otRatio: 9.6 },
+  { month: 'Dec', headcount: 191, attrition: 2.5, hiring: 4.8, payroll: 520000, salary: 410000, allowances: 42000, ot: 68000, att: 92, otRatio: 13.1 },
+  { month: 'Jan', headcount: 194, attrition: 1.2, hiring: 3.5, payroll: 470000, salary: 405000, allowances: 27000, ot: 38000, att: 97, otRatio: 8.1 },
+  { month: 'Feb', headcount: 198, attrition: 1.0, hiring: 3.9, payroll: 485000, salary: 415000, allowances: 29000, ot: 41000, att: 98, otRatio: 8.4 },
+  { month: 'Mar', headcount: 201, attrition: 1.5, hiring: 4.2, payroll: 498000, salary: 425000, allowances: 29000, ot: 44000, att: 96, otRatio: 8.8 },
 ];
 
 const deptComposition = [
