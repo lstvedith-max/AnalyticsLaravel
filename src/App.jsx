@@ -867,10 +867,20 @@ export default function App() {
   <ChartCard title="OT TRENDS OVER TIME">
     <ResponsiveContainer width="100%" height={250}>
       <LineChart data={workforceTrends}>
-        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-        <XAxis dataKey="month" axisLine={false} tickLine={false} />
-        <Tooltip /><Line type="monotone" dataKey="ot" stroke="#f59e0b" strokeWidth={3} />
-      </LineChart>
+      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+      <XAxis dataKey="month" axisLine={false} tickLine={false} />
+      {/* Added YAxis to match the visual scaling of the first card */}
+      <YAxis axisLine={false} tickLine={false} />
+      <Tooltip />
+      {/* Added dot={{r:4}} to match the style of the first card */}
+      <Line 
+        type="monotone" 
+        dataKey="ot" 
+        stroke="#f59e0b" 
+        strokeWidth={3} 
+        dot={{r: 4}} 
+      />
+    </LineChart>
     </ResponsiveContainer>
   </ChartCard>
 
