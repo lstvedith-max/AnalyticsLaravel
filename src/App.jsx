@@ -793,13 +793,21 @@ export default function App() {
   <ChartCard title="PAYROLL MONTHLY BREAKDOWN" subtitle="Click legend to hide/show categories">
     <ResponsiveContainer width="100%" height={250}>
       <BarChart data={workforceTrends}>
-        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-        <XAxis dataKey="month" axisLine={false} tickLine={false} />
-        <Legend onClick={togglePayrollSeries} formatter={renderLegendText(payrollHidden)} iconType="circle" />
-        <Bar dataKey="salary" name="Basic Salary" hide={payrollHidden['salary']} stackId="a" fill="#1e293b" />
-        <Bar dataKey="allowances" name="Allowances" hide={payrollHidden['allowances']} stackId="a" fill="#3b82f6" />
-        <Bar dataKey="ot" name="Overtime Pay" hide={payrollHidden['ot']} stackId="a" fill="#f59e0b" />
-      </BarChart>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                    <XAxis dataKey="month" axisLine={false} tickLine={false} />
+                    <YAxis axisLine={false} tickLine={false} tickFormatter={(val) => `₱${val / 1000}k`} />
+                    <Tooltip formatter={(value) => `₱${value.toLocaleString()}`} />
+ 
+                    {/* Updated Legend with toggle and strike-through */}
+                    <Legend
+                      onClick={togglePayrollSeries}
+                      formatter={renderLegendText(payrollHidden)}
+                      iconType="circle"
+                    />
+                    <Bar dataKey="salary" name="Basic Salary" hide={payrollHidden['salary']} fill="#1e293b" stackId="a" />
+                    <Bar dataKey="allowances" name="Allowances" hide={payrollHidden['allowances']} fill="#3b82f6" stackId="a" />
+                    <Bar dataKey="ot" name="Overtime Pay" hide={payrollHidden['ot']} fill="#f59e0b" stackId="a" />
+                  </BarChart>
     </ResponsiveContainer>
   </ChartCard>
 
